@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Track Package - Courier Tracking System</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: #f8f9fa;
+    }
+    .card {
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .tracking-status {
+      font-size: 1.2rem;
+      margin-top: 20px;
+    }
+    .progress {
+      height: 20px;
+    }
+    .progress-bar {
+      font-weight: bold;
+    }
+    .tracking-info {
+      margin-top: 20px;
+    }
+    .tracking-icon {
+      font-size: 2rem;
+      color: #0d6efd;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container-fluid">
+    <a class="navbar-brand d-flex align-items-center" href="Client Dashboard.html">
+      <i class="fas fa-box me-2"></i> CourierExpress
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="Client Dashboard.html">Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link" href="My Shipment Client .html">My Shipments</a></li>
+        <li class="nav-item"><a class="nav-link" href="New Shipment Client.html">New Shipment</a></li>
+        <li class="nav-item"><a class="nav-link" href="Tracking page Client.html">Track</a></li>
+        <li class="nav-item"><a class="nav-link" href="Client History.html">History</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" id="logout-link" onclick="logout(); return false;">Logout</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card p-4">
+        <h2 class="mb-4 text-center">📦 Track Your Shipment</h2>
+
+        <!-- Tracking Input -->
+        <div class="input-group mb-4">
+          <input type="text" class="form-control" placeholder="Enter tracking number..." id="trackingNumber" aria-label="Tracking number">
+          <button id="trackBtn" type="button" class="btn btn-primary">
+            <i class="fas fa-search me-2" aria-hidden="true"></i>Track
+          </button>
+        </div>
+
+        <!-- Tracking Status -->
+  <div id="trackingResult" class="tracking-info" style="display:none;" aria-hidden="true">
+          <div class="text-center tracking-status">
+            <i class="fas fa-shipping-fast tracking-icon"></i>
+            <p><strong>Status:</strong> <span id="statusText">In Transit</span></p>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="progress mb-3">
+            <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="75" style="width: 75%;">75%</div>
+          </div>
+
+          <!-- Extra Info -->
+          <ul class="list-group">
+            <li class="list-group-item"><strong>Location:</strong> <span id="location">Denver, CO</span></li>
+            <li class="list-group-item"><strong>Expected Delivery:</strong> <span id="expected">Tomorrow 2:00 PM</span></li>
+            <li class="list-group-item"><strong>Carrier:</strong> Courier Tracking System</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+function trackPackage() {
+  const trackingNumber = document.getElementById('trackingNumber').value.trim();
+  if (!trackingNumber) {
+    alert('Please enter a tracking number.');
+    return;
+  }
+
+  // Show tracking info
+  const result = document.getElementById('trackingResult');
+  result.style.display = 'block';
+  result.setAttribute('aria-hidden', 'false');
+
+  // Example: Simulate dynamic tracking data
+  document.getElementById('statusText').textContent = "In Transit";
+  const prog = document.getElementById('progressBar');
+  prog.style.width = "75%";
+  prog.textContent = "75%";
+  prog.setAttribute('aria-valuenow', '75');
+  document.getElementById('location').textContent = "Rajkot, Gujarat 360001";
+  document.getElementById('expected').textContent = "Tomorrow 2:00 PM";
+}
+
+// Attach the click handler to the button (script is at end of body so element exists)
+document.getElementById('trackBtn').addEventListener('click', trackPackage);
+</script>
+<script>
+  // mark active nav link
+  document.addEventListener('DOMContentLoaded', function() {
+    const current = location.pathname.split('/').pop();
+    document.querySelectorAll('.navbar .nav-link').forEach(a => {
+      if (a.getAttribute('href') === current) {
+        a.classList.add('active');
+        a.setAttribute('aria-current','page');
+      }
+    });
+  });
+</script>
+
+</body>
+<script src="js/logout.js"></script>
+</html>

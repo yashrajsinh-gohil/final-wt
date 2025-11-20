@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Login / Signup - Courier Tracking System</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+        <style>
+            body { background: #f8f9fa; }
+            .card { border-radius: 0.75rem; }
+            .pointer { cursor: pointer; }
+        </style>
+    </head>
+    <body>
+        <header class="navbar navbar-light bg-white shadow-sm">
+            <div class="container d-flex align-items-center">
+                <a href="#" class="navbar-brand d-flex align-items-center">
+                    <i class="fas fa-box text-primary fs-4 me-2"></i>
+                    <span>Courier Tracking System</span>
+                </a>
+                <!-- Home button: quick return to the site homepage -->
+                <div class="ms-auto">
+                    <a href="Homepage.html" class="btn btn-outline-primary btn-sm">Home</a>
+                </div>
+            </div>
+        </header>
+
+        <main class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-md-10 col-lg-8">
+                    <div class="card shadow-sm">
+                        <div class="card-body p-4 p-md-5">
+                            <div class="d-flex align-items-center mb-4">
+                                <i class="fas fa-sign-in-alt text-primary display-6 me-3"></i>
+                                <div>
+                                    <h3 class="mb-0">Sign in or Create an Account</h3>
+                                    <small class="text-muted">Login as admin or client, or sign up as a new client.</small>
+                                </div>
+                            </div>
+
+                            <div class="mb-4 d-flex gap-2">
+                                <button id="showLoginBtn" class="btn btn-outline-primary">Login</button>
+                                <button id="showSignupBtn" class="btn btn-outline-secondary">Sign Up</button>
+                            </div>
+
+                            <!-- Alerts -->
+                            <div id="alert" class="alert d-none" role="alert"></div>
+
+                            <!-- LOGIN -->
+                            <div id="loginView">
+                                <form id="loginForm">
+                                    <div class="mb-3">
+                                        <label class="form-label">Email</label>
+                                        <input id="loginEmail" type="email" class="form-control" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Password</label>
+                                        <input id="loginPassword" type="password" class="form-control" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Login as</label>
+                                        <div>
+                                            <input class="form-check-input me-1" type="radio" name="loginRole" id="asClient" value="client" checked>
+                                            <label class="form-check-label me-3" for="asClient">Client</label>
+                                            <input class="form-check-input me-1" type="radio" name="loginRole" id="asAdmin" value="admin">
+                                            <label class="form-check-label" for="asAdmin">Admin</label>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary w-100" type="submit">Sign In</button>
+                                </form>
+
+                                <hr>
+                                <div class="row">
+                                    <div class="col-md-6 mb-2">
+                                        <div class="card bg-light p-2">
+                                            <div class="small fw-bold text-primary">Client Demo</div>
+                                            <div class="small text-muted">Email: <code>client1@demo.com</code><br>Password: <code>password123</code></div>
+                                            <button class="btn btn-sm btn-outline-primary mt-2 w-100" onclick="fillDemo('client1@demo.com','password123','client')">Use Demo</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-2">
+                                        <div class="card bg-light p-2">
+                                            <div class="small fw-bold text-success">Admin Demo</div>
+                                            <div class="small text-muted">Email: <code>admin@admin.com</code><br>Password: <code>admin123</code></div>
+                                            <button class="btn btn-sm btn-outline-success mt-2 w-100" onclick="fillDemo('admin@admin.com','admin123','admin')">Use Demo</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- SIGNUP -->
+                            <div id="signupView" class="d-none">
+                                <form id="signupForm">
+                                    <div class="mb-3">
+                                        <label class="form-label">Full name</label>
+                                        <input id="signupName" type="text" class="form-control" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Email</label>
+                                        <input id="signupEmail" type="email" class="form-control" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Password</label>
+                                        <input id="signupPassword" type="password" class="form-control" minlength="6" required>
+                                    </div>
+                                    <button class="btn btn-secondary w-100" type="submit">Create account</button>
+                                </form>
+                                <div class="text-muted small mt-3">By signing up you create a client account stored locally in your browser (localStorage).</div>
+                            </div>
+
+                            <!-- DASHBOARDS -->
+                            <div id="adminPanel" class="d-none mt-4">
+                                <h4>Admin Dashboard</h4>
+                                <p class="text-muted" id="adminWelcome"></p>
+                                <button class="btn btn-outline-danger" onclick="logout()">Logout</button>
+                            </div>
+
+                            <div id="clientPanel" class="d-none mt-4">
+                                <h4>Client Dashboard</h4>
+                                <p class="text-muted" id="clientWelcome"></p>
+                                <button class="btn btn-outline-danger" onclick="logout()">Logout</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="js/login.js"></script>
+    </body>
+</html>

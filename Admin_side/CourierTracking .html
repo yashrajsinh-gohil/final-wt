@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Couriers - Courier Tracking System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .sidebar {
+            width: 250px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .logo-sidebar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+        }
+        .sidebar-nav .nav-link.active {
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="d-flex">
+    <!-- Sidebar -->
+    <div class="sidebar bg-white shadow-sm">
+        <div class="sidebar-header p-4 border-bottom">
+            <div class="d-flex align-items-center">
+                <div class="logo-sidebar me-3">
+                    <i class="fas fa-box text-white"></i>
+                </div>
+                <div class="d-block">
+                    <h5 class="mb-0 fw-bold">Courier Tracking System</h5>
+                    <small class="text-muted">Admin Panel</small>
+                </div>
+            </div>
+        </div>
+        <nav class="sidebar-nav p-3 flex-grow-1">
+                <a href="AdminDashboard .html" class="nav-link mb-2">
+                <i class="fas fa-th-large me-3"></i>
+                <span class="d-inline">Dashboard</span>
+            </a>
+            <a href="CourierTracking .html" class="nav-link active mb-2">
+                <i class="fas fa-truck me-3"></i>
+                <span class="d-inline">Manage Couriers</span>
+            </a>
+            <a href="ClientDetailsAdmin.html" class="nav-link mb-2">
+                <i class="fas fa-users me-3"></i>
+                <span class="d-inline">Manage Clients</span>
+            </a>
+            <a href="Report and Setting-Admin.html" class="nav-link mb-2">
+                <i class="fas fa-file-alt me-3"></i>
+                <span class="d-inline">Reports & Settings</span>
+            </a>
+            <a href="History Client.html" class="nav-link mb-2">
+                <i class="fas fa-history me-3"></i>
+                <span class="d-inline">History</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer p-3 border-top mt-auto">
+            <div class="d-block mb-3">
+                <div class="d-flex align-items-center">
+                    <div class="user-avatar me-3">A</div>
+                    <div>
+                        <div class="fw-medium">Admin</div>
+                        <small class="text-muted">Admin</small>
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-outline-danger btn-sm w-100" onclick="logout()">
+                <i class="fas fa-sign-out-alt me-2"></i>
+                <span class="d-inline">Logout</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content flex-fill">
+        <!-- Header -->
+        <div class="content-header bg-white border-bottom p-4 d-flex justify-content-between align-items-center">
+            <div>
+                <h2 class="fw-bold mb-1">Manage Couriers</h2>
+                <p class="text-muted mb-0">Track and manage all courier deliveries</p>
+            </div>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCourierModal">
+                <i class="fas fa-plus me-2"></i>Add New Courier
+            </button>
+        </div>
+
+        <!-- Filters -->
+        <div class="bg-white border-bottom p-4">
+            <div class="row g-3">
+                <div class="col-md-8">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        <input type="text" class="form-control" id="searchInput" placeholder="Search by ID, sender, or receiver...">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <select class="form-select" id="statusFilter">
+                        <option value="">All Status</option>
+                        <option value="Pending">Pending</option>
+                        <option value="In Transit">In Transit</option>
+                        <option value="Delivered">Delivered</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="content-body p-4">
+            <div class="card">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                        <tr>
+                            <th>Courier ID</th>
+                            <th>Sender</th>
+                            <th>Receiver</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody id="courierTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Courier Modal -->
+<div class="modal fade" id="addCourierModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="addCourierForm">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New Courier</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Sender Name</label>
+                        <input type="text" class="form-control" name="sender" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Sender Address</label>
+                        <input type="text" class="form-control" name="senderAddress" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Receiver Name</label>
+                        <input type="text" class="form-control" name="receiver" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Receiver Address</label>
+                        <input type="text" class="form-control" name="receiverAddress" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Phone Number</label>
+                        <input type="tel" class="form-control" name="phone" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Estimated Delivery Date</label>
+                        <input type="date" class="form-control" name="estimatedDelivery" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Courier</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// Inline script: populates table with sample Indian data and makes search/filter/add work
+const couriers = [
+    { id: 'CN-1001', sender: 'Amit Kumar', senderAddress: 'A-12, MG Road, Kankarbagh, Patna, Bihar', receiver: 'Rohit Sharma', receiverAddress: 'Flat 5B, Andheri West, Mumbai, Maharashtra', phone: '+91-9810012345', estimatedDelivery: '2025-11-12', status: 'Pending', date: '2025-11-01' },
+    { id: 'CN-1002', sender: 'Sangeeta Patel', senderAddress: '22, Lower Tank Bund, Hyderabad, Telangana', receiver: 'Priya Verma', receiverAddress: 'Plot 7, Sector 14, Noida, Uttar Pradesh', phone: '+91-9876543210', estimatedDelivery: '2025-11-09', status: 'In Transit', date: '2025-11-02' },
+    { id: 'CN-1003', sender: 'Ramesh Iyer', senderAddress: '12/4 3rd Cross, Jayanagar, Bangalore, Karnataka', receiver: 'Meena Nair', receiverAddress: '37, Marine Drive, Kochi, Kerala', phone: '+91-9444012345', estimatedDelivery: '2025-11-08', status: 'Delivered', date: '2025-10-30' },
+    { id: 'CN-1004', sender: 'Zubair Khan', senderAddress: '39, Charminar Road, Old City, Hyderabad, Telangana', receiver: 'Kavita Joshi', receiverAddress: '12, FC Road, Pune, Maharashtra', phone: '+91-9021001234', estimatedDelivery: '2025-11-15', status: 'Pending', date: '2025-11-03' }
+];
+
+let nextId = 1005;
+
+function $(sel){return document.querySelector(sel)}
+function $all(sel){return Array.from(document.querySelectorAll(sel))}
+
+function formatDate(d){ if(!d) return ''; const dt=new Date(d); if(isNaN(dt)) return d; return dt.toLocaleDateString('en-GB'); }
+
+function statusBadgeClass(status){ switch(status){ case 'Pending': return 'bg-warning text-dark'; case 'In Transit': return 'bg-primary'; case 'Delivered': return 'bg-success'; default: return 'bg-secondary'; } }
+
+function escapeHtml(unsafe){ return (unsafe+'').replace(/[&<>\"]+/g, function(m){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]); }); }
+
+function renderTable(){
+    const tbody = document.getElementById('courierTableBody');
+    tbody.innerHTML = '';
+    const searchText = (document.getElementById('searchInput').value || '').trim().toLowerCase();
+    const statusFilter = document.getElementById('statusFilter').value;
+
+    const filtered = couriers.filter(c => {
+        const matchesStatus = !statusFilter || c.status === statusFilter;
+        const matchesSearch = !searchText || (c.id.toLowerCase().includes(searchText) || c.sender.toLowerCase().includes(searchText) || c.receiver.toLowerCase().includes(searchText));
+        return matchesStatus && matchesSearch;
+    });
+
+    if(filtered.length === 0){
+        const tr = document.createElement('tr');
+        const td = document.createElement('td'); td.colSpan=6; td.className='text-center text-muted py-4'; td.textContent='No couriers found'; tr.appendChild(td); tbody.appendChild(tr); return;
+    }
+
+    filtered.forEach(c => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${c.id}</td>
+            <td>
+                <div class="fw-semibold">${escapeHtml(c.sender)}</div>
+                <div class="text-muted small">${escapeHtml(c.senderAddress)}</div>
+            </td>
+            <td>
+                <div class="fw-semibold">${escapeHtml(c.receiver)}</div>
+                <div class="text-muted small">${escapeHtml(c.receiverAddress)}</div>
+            </td>
+            <td><span class="badge ${statusBadgeClass(c.status)}">${c.status}</span></td>
+            <td>${formatDate(c.estimatedDelivery)}</td>
+            <td>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-sm btn-success action-deliver" data-id="${c.id}" ${c.status==='Delivered'?'disabled':''}>Mark Delivered</button>
+                    <button class="btn btn-sm btn-danger action-delete" data-id="${c.id}">Delete</button>
+                </div>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+
+    $all('.action-deliver').forEach(btn => btn.addEventListener('click', e => { const id = e.currentTarget.dataset.id; markDelivered(id); }));
+    $all('.action-delete').forEach(btn => btn.addEventListener('click', e => { const id = e.currentTarget.dataset.id; deleteCourier(id); }));
+}
+
+function markDelivered(id){ const c = couriers.find(x => x.id === id); if(!c) return; c.status='Delivered'; renderTable(); }
+function deleteCourier(id){ const idx = couriers.findIndex(x => x.id===id); if(idx===-1) return; if(!confirm('Delete courier ' + id + '?')) return; couriers.splice(idx,1); renderTable(); }
+
+// Add courier form handling
+const addForm = document.getElementById('addCourierForm');
+if(addForm){
+    addForm.addEventListener('submit', (e)=>{
+        e.preventDefault();
+        const fd = new FormData(addForm);
+        const newC = {
+            id: 'CN-' + (nextId++),
+            sender: fd.get('sender') || 'Unknown',
+            senderAddress: fd.get('senderAddress') || '',
+            receiver: fd.get('receiver') || 'Unknown',
+            receiverAddress: fd.get('receiverAddress') || '',
+            phone: fd.get('phone') || '',
+            estimatedDelivery: fd.get('estimatedDelivery') || '',
+            status: 'Pending',
+            date: new Date().toISOString().slice(0,10)
+        };
+        couriers.unshift(newC);
+        renderTable();
+        addForm.reset();
+        const modalEl = document.getElementById('addCourierModal');
+        const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+        modal.hide();
+    });
+}
+
+// Search and filter listeners
+const searchInput = document.getElementById('searchInput'); if(searchInput) searchInput.addEventListener('input', () => renderTable());
+const statusFilter = document.getElementById('statusFilter'); if(statusFilter) statusFilter.addEventListener('change', () => renderTable());
+
+// Logout handler (same behavior as Admin pages)
+function logout(){
+    // Clear small session-like keys and redirect to shared login page
+    try{ localStorage.removeItem('yash_session'); }catch(e){}
+    try{ localStorage.removeItem('cts_current_user'); }catch(e){}
+    try{ localStorage.removeItem('yash_user'); }catch(e){}
+    // Redirect to the project's login page (relative path from Admin_side)
+    var target = '../HomePage/Login Admin and Client.html';
+    try{ location.href = target; }catch(e){ location.href = 'login.html'; }
+}
+window.logout = logout;
+
+// initial render
+renderTable();
+</script>
+</body>
+</html>
